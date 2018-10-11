@@ -194,19 +194,19 @@ INSERT INTO vendas(fk_Mes,fk_Departamento,fk_Uf,fk_Item,Vendascol)
         (4,1,1,2,512),
         (4,1,1,3,380);
 
--- Cria tabela vendas caso não exista.
+-- Cria tabela visitas caso não exista.
 CREATE TABLE IF NOT EXISTS B2W.visitas(
   idVisitas INT NOT NULL AUTO_INCREMENT,
   Visitascol INT NOT NULL,
 	PRIMARY KEY (idVisitas)
 )ENGINE = InnoDB;
--- Adiciona Coluna fk_Item de tipo inteiro na tabela vendas não permitindo valor nulo.
+-- Adiciona Coluna fk_Item de tipo inteiro na tabela visitas não permitindo valor nulo.
 ALTER TABLE visitas ADD COLUMN fk_Item INT NOT NULL;
--- Adiciona Coluna fk_Departamento na tabela de vendas.
+-- Adiciona Coluna fk_Departamento na tabela de visitas.
 ALTER TABLE visitas ADD COLUMN fk_Departamento INT NOT NULL;
--- Adiciona Coluna fk_Uf na tabela de vendas.
+-- Adiciona Coluna fk_Uf na tabela de visitas.
 ALTER TABLE visitas ADD COLUMN fk_Uf INT NOT NULL;
--- Adiciona Coluna fk_mes na tabela de vendas.
+-- Adiciona Coluna fk_mes na tabela de visitas.
 ALTER TABLE visitas ADD COLUMN fk_Mes INT NOT NULL;
 -- Adiciona uma restrição na coluna fk_item para aceitar apenas um valor já existente na tabela item(idItem).
 ALTER TABLE visitas ADD CONSTRAINT visitas_item_fk
@@ -220,7 +220,7 @@ ALTER TABLE visitas ADD CONSTRAINT visitas_uf_fk
 -- Adiciona uma restrição como as anteriores nas respectivas dependências.
 ALTER TABLE visitas ADD CONSTRAINT visitas_mes_fk
 	FOREIGN KEY (fk_Mes) REFERENCES mes(idMes);
--- Inserir dados na tabela vendas usando os respectivos id de cada chave estrangeira.
+-- Inserir dados na tabela visitas usando os respectivos id de cada chave estrangeira.
 -- Para que essa inserção ocorra é preciso que as outras tabelas relacionadas possuam os dados inseridos.
 INSERT INTO visitas(fk_Mes,fk_Departamento,fk_Uf,fk_Item,visitascol)
 	VALUES 
