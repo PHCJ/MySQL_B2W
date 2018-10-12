@@ -1,6 +1,6 @@
 -- MySQL Script
--- 11 out 2018 22:00
--- Model: New Model    Version: 2.2
+-- 12 out 2018 22:00
+-- Model: New Model    Version: 2.3
 -- By Paulo Henrique Cardoso de Jesus
 DROP DATABASE B2W;
 -- Cria banco de dados caso não exista.
@@ -363,7 +363,7 @@ ALTER TABLE financeiro ADD CONSTRAINT financeiro_mes_fk
 -- Inserir dados na tabela financeiro usando os respectivos id de cada chave estrangeira.
 -- Para que essa inserção ocorra é preciso que as outras tabelas relacionadas possuam os dados inseridos.
 INSERT INTO financeiro(fk_Mes,fk_Departamento,fk_Uf,fk_Item,Faturamento_Produto,Faturamento_Frete,Custo_Produto,Custo_Frete,Custo_Mkt,Desconto_Produto,Desconto_Frete)
-	VALUES 
+	VALUES
 		(1,2,3,1,149250,42984,71640,35820,5970,0,4776),
 		(1,2,3,2,148050,30456,76140,25380,4230,0,3384),
 		(1,2,3,3,133650,21384,89100,17820,2970,0,2376),
@@ -421,7 +421,7 @@ INSERT INTO financeiro(fk_Mes,fk_Departamento,fk_Uf,fk_Item,Faturamento_Produto,
         (3,3,2,1,329745,16020,293700,29370,24030,17355,16020),
         (3,3,2,2,436905,13140,328500,24090,19710,22995,13140),
         (3,3,2,3,754490,12540,647900,22990,18810,39710,12540),
-        (4,3,2,1,188500,7400,159500,15950,13050,0,0),
+        (4,3,2,1,188500,17400,159500,15950,13050,0,0),
         (4,3,2,2,231000,13200,165000,12100,9900,0,0),
         (4,3,2,3,395200,12480,322400,11440,9360,0,0),
         (1,3,1,1,151200,0,129600,5400,9720,0,8640),
@@ -472,3 +472,46 @@ INSERT INTO financeiro(fk_Mes,fk_Departamento,fk_Uf,fk_Item,Faturamento_Produto,
         (4,1,1,1,3402,6123.6,1701,5670,1701,0,680.4),
         (4,1,1,2,2832,5097.6,1416,4720,1416,0,566.4),
         (4,1,1,3,2688,4838.4,1344,4480,1344,0,537.6);
+-- ---------------------------------------------------------------------------------------------------
+-- Criando uma unica tabela utilizando todos os dados do banco
+-- ---------------------------------------------------------------------------------------------------
+
+CREATE TABLE base_unica as Select financeiro.*,vendascol, visitascol from financeiro,vendas,visitas where (idVendas = idVisitas)&&(idFinanceiro=idVendas);
+
+-- ---------------------------------------------------------------------------------------------------
+-- 
+-- ---------------------------------------------------------------------------------------------------
+DELIMITER $$
+CREATE PROCEDURE departamento_maior_faturamento ()
+BEGIN
+    DECLARE faturamento1,faturamento2,faturamento3 double;
+		set @faturamento1=(SELECT SUM(Faturamento_Produto)+sum(Faturamento_Frete)FROM B2W.base_unica WHERE fk_departamento = 1);
+		set @faturamento2=(SELECT SUM(Faturamento_Produto)+sum(Faturamento_Frete)FROM B2W.base_unica WHERE fk_departamento = 2);
+		set @faturamento3=(SELECT SUM(Faturamento_Produto)+SUM(Faturamento_Frete)FROM B2W.base_unica WHERE fk_departamento = 3);
+		SELECT @faturamento1 as `Bola de Gude`,@faturamento2 as `Cadeiras`,@faturamento3 as `Maquina Fotografica`;
+END $$
+DELIMITER ;
+
+call departamento_maior_faturamento;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
