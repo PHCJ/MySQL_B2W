@@ -1,2 +1,2 @@
-# MySQL_testeB2W
-Banco teste para B2W
+# MySQL_B2W
+database using preformatted data with simple procedures and for data analysis.
